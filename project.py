@@ -1,19 +1,42 @@
+from collections import deque, defaultdict
 
 
 class FamilyTree:
     def __init__(self):
-        pass
+        self.parent = defaultdict(list)
+        self.children = defaultdict(list)
+
     def add_relationship(self, parent, child):
-        pass
+        self.children[parent].append(child)
+        self.parent[child].append(parent)
+
     def descendants(self, person):
-        pass
+        descendants = []
+        queue = deque([person])
+
+        while queue:
+            current = queue.popleft()
+            for child in self.children[current]:
+                descendants.append(child)
+                queue.append(child)
+
         return descendants
+
     def ancestors(self, person):
-        pass
+        ancestors = []
+        queue = deque([person])
+
+        while queue:
+            current = queue.popleft()
+            for parent in self.parent[current]:
+                ancestors.append(parent)
+                queue.append(parent)
+
         return ancestors
+
     def relationship_path(self, start, end):
-        pass
-        return None # If no path found
+        if start == end:
+            return [start]
 
 
 def main():
@@ -34,8 +57,6 @@ def main():
     # Find relationship path between John and Michael
     path_john_to_michael = family_tree.relationship_path("John", "Michael")
     print("Relationship path from John to Michael:", path_john_to_michael)
-
-
 
 
 if __name__ == '__main__':
